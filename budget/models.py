@@ -1,9 +1,6 @@
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth import get_user_model
-
-
-CURENT_USER = get_user_model()
 
 
 class Frequency(models.IntegerChoices):
@@ -21,7 +18,7 @@ class Frequency(models.IntegerChoices):
 
 
 class Income(models.Model):
-    user = models.ForeignKey(CURENT_USER, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     gross_salary = models.DecimalField(max_digits=10, decimal_places=2)
     gross_paycheck = models.DecimalField(max_digits=10, decimal_places=2)
@@ -33,7 +30,7 @@ class Income(models.Model):
 
 
 class Expenses(models.Model):
-    user = models.ForeignKey(CURENT_USER, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     category = models.OneToOneField("Category", on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -57,7 +54,7 @@ class Expenses(models.Model):
 
 
 class Savings(models.Model):
-    user = models.ForeignKey(CURENT_USER, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
 
