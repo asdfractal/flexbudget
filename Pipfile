@@ -9,6 +9,7 @@ dj-database-url = "*"
 psycopg2-binary = "*"
 python-decouple = "*"
 pytz = "*"
+django-allauth = "*"
 
 [dev-packages]
 black = "==21.10b0"
