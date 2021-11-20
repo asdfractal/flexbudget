@@ -22,7 +22,14 @@
       <div class="row">
         <div class="col-12">
           <div class="content">
-            <form action="#" method="post">
+            {% for income in user_income %}
+            <p>{{ income }}</p>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="content">
+            <form action="{% url 'update_income' %}" method="post">
               {% csrf_token %}
               {{ income_form|crispy }}
               <input type="submit" value="Submit">
