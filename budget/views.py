@@ -9,38 +9,39 @@ def home(request):
     page_title = "Flexbudget"
     income_form = forms.IncomeForm()
     expense_form = forms.ExpenseForm()
+    savings_form = forms.SavingsForm()
 
     user_income = models.Income.objects.filter(user=request.user)
     user_expenses = models.Expenses.objects.filter(user=request.user)
+    user_savings = models.Savings.objects.filter(user=request.user)
 
     context = {
         "page_title": page_title,
         "income_form": income_form,
         "expense_form": expense_form,
+        "savings_form": savings_form,
         "user_income": user_income,
         "user_expenses": user_expenses,
+        "user_savings": user_savings,
     }
 
     return render(request, "home.html", context)
 
 
 @require_POST
-def update_income(request):
-    form = forms.IncomeForm(request.POST)
-    if form.is_valid():
-        income = form.save(commit=False)
-        income.user = request.user
-        income.save()
-        return redirect(reverse("home"))
-
-
-@require_POST
-def update_expense(request):
-    form = forms.ExpenseForm(request.POST)
-    if form.is_valid():
-        expense = form.save(commit=False)
-        expense.user = request.user
-        expense.save()
+def update_budget(request, model_to_update):
+    form_collection = {
+        "income": forms.IncomeForm,
+        "expense": forms.ExpenseForm,
+        "savings": forms.SavingsForm,
+    }
+    form = form_collection[model_to_update]
+    populated_form = form(request.POST)
+    if populated_form.is_valid():
+        updated_data = populated_form.save(commit=False)
+        updated_data.user = request.user
+        updated_data.save()
+        print(updated_data)
         return redirect(reverse("home"))
     print(form.errors)
     return redirect(reverse("home"))

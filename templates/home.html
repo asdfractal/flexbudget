@@ -24,14 +24,21 @@
         </div>
       </div>
       {% include 'components/income_display.html' %}
-      {% include 'components/form.html' with form=income_form post_url="/update_income/" %}
+      {% include 'components/budget_form.html' with form=income_form post_url="/update/income/" %}
       <div class="row">
         <div class="col-12">
           <h5 class="text-center">Expenses</h5>
         </div>
       </div>
       {% include 'components/expense_display.html' %}
-      {% include 'components/form.html' with form=expense_form post_url="/update_expense/" %}
+      {% include 'components/budget_form.html' with form=expense_form post_url="/update/expense/" %}
+      <div class="row">
+        <div class="col-12">
+          <h5 class="text-center">Savings</h5>
+        </div>
+      </div>
+      {% include 'components/savings_display.html' %}
+      {% include 'components/budget_form.html' with form=savings_form post_url="/update/savings/" %}
     </div>
   </div>
   <nav class="navbar navbar-fixed-bottom">

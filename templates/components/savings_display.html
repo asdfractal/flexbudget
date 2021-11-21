@@ -1,0 +1,26 @@
+<div class="row .row-eq-spacing">
+  <div class="col-12">
+    <div class="content m-10 m-md-10">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th></th>
+            <th><i class="fas fa-file-invoice-dollar"></i></th>
+            <th><i class="fas fa-receipt"></i></th>
+            <th><i class="fas fa-wallet"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for savings in user_savings %}
+          <tr>
+            <th>{{ savings.name|truncatechars:10 }}</th>
+            <td>{{ savings.amount|floatformat:0 }}</td>
+            <td>{{ savings.per_paycheck_saving|floatformat:0 }}</td>
+            <td>{{ savings.annual_saving|floatformat:0 }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

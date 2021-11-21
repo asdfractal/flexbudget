@@ -3,6 +3,5 @@ from . import views
 
 urlpatterns = [
     path("", views.home, name="home"),
-    path("update_income/", views.update_income, name="update_income"),
-    path("update_expense/", views.update_expense, name="update_expense"),
+    path("update/<model_to_update>/", views.update_budget, name="update_budget"),
 ]
