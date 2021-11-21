@@ -6,11 +6,11 @@ name = "pypi"
 [packages]
 django = "*"
 dj-database-url = "*"
-psycopg2-binary = "*"
 python-decouple = "*"
 pytz = "*"
 django-allauth = "*"
 django-crispy-forms = "*"
+psycopg2 = "*"
 
 [dev-packages]
 black = "==21.10b0"
