@@ -1,0 +1,28 @@
+<div class="row .row-eq-spacing">
+  <div class="col-12">
+    <div class="content m-10 m-md-10">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th></th>
+            <th><i class="fas fa-file-invoice-dollar"></i></th>
+            <th><i class="fas fa-receipt"></i></th>
+            <th><i class="fas fa-wallet"></i></th>
+            <th class="text-right"><i class="fas fa-recycle"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for income in user_income %}
+          <tr>
+            <th>{{ income.name|truncatechars:10 }}</th>
+            <td>{{ income.gross_salary|floatformat:0 }}</td>
+            <td>{{ income.gross_paycheck|floatformat:0 }}</td>
+            <td>{{ income.net_paycheck|floatformat:0 }}</td>
+            <td class="text-right">{{ income.frequency }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

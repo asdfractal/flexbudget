@@ -1,0 +1,13 @@
+{% load crispy_forms_tags %}
+
+<div class="row row-eq-spacing">
+  <div class="col-12">
+    <div class="content">
+      <form action="{{ post_url }}" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+  </div>
+</div>
