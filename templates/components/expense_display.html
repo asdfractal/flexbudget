@@ -1,0 +1,30 @@
+<div class="row .row-eq-spacing">
+  <div class="col-12">
+    <div class="content m-10 m-md-10">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th></th>
+            <th><i class="fas fa-file-invoice-dollar"></i></th>
+            <th><i class="fas fa-receipt"></i></th>
+            <th><i class="fas fa-wallet"></i></th>
+            <th class="text-right"><i class="fas fa-recycle"></i></th>
+            <th class="text-right"><i class="fas fa-recycle"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for expense in user_expenses %}
+          <tr>
+            <th>{{ expense.name|truncatechars:10 }}</th>
+            <td>{{ expense.category|truncatechars:10 }}</td>
+            <td>{{ expense.amount }}</td>
+            <td>{{ expense.frequency }}</td>
+            <td class="text-right">{{ expense.per_paycheck_cost }}</td>
+            <td class="text-right">{{ expense.annual_cost }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -25,6 +25,13 @@
       </div>
       {% include 'components/income_display.html' %}
       {% include 'components/form.html' with form=income_form post_url="/update_income/" %}
+      <div class="row">
+        <div class="col-12">
+          <h5 class="text-center">Expenses</h5>
+        </div>
+      </div>
+      {% include 'components/expense_display.html' %}
+      {% include 'components/form.html' with form=expense_form post_url="/update_expense/" %}
     </div>
   </div>
   <nav class="navbar navbar-fixed-bottom">
