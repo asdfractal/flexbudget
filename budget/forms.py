@@ -29,3 +29,15 @@ class ExpenseForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+
+class SavingsForm(forms.ModelForm):
+    class Meta:
+        model = Savings
+        fields = (
+            "name",
+            "amount",
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)

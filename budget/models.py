@@ -57,6 +57,9 @@ class Savings(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
+    is_percent = models.BooleanField(default=True)
+    per_paycheck_saving = models.IntegerField(default=0)
+    annual_saving = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
