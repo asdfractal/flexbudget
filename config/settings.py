@@ -29,6 +29,8 @@ DEBUG = config("DEBUG", default=True, cast=bool)
 
 ALLOWED_HOSTS = ["127.0.0.1"]
 
+AUTH_USER_MODEL = "users.CustomUser"
+
 
 # Application definition
 
@@ -44,8 +46,16 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "crispy_forms",
+    "users",
     "budget",
 ]
+
+# allauth
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_USERNAME_REQUIRED = True
+
 
 SITE_ID = 1
 
