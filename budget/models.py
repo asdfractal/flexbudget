@@ -18,7 +18,7 @@ class Frequency(models.IntegerChoices):
 
 
 class Income(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="income")
     name = models.CharField(max_length=100)
     gross_salary = models.DecimalField(max_digits=10, decimal_places=2)
     gross_paycheck = models.DecimalField(max_digits=10, decimal_places=2)
@@ -30,7 +30,7 @@ class Income(models.Model):
 
 
 class Expenses(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="expenses")
     name = models.CharField(max_length=100)
     category = models.ForeignKey("Category", on_delete=models.CASCADE, blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -54,7 +54,7 @@ class Expenses(models.Model):
 
 
 class Savings(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="savings")
     name = models.CharField(max_length=100)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     is_percent = models.BooleanField(default=True)
