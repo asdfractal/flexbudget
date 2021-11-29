@@ -3,8 +3,11 @@ from django.contrib.auth.models import PermissionsMixin, UserManager
 from django.contrib.postgres.fields import CICharField, CIEmailField
 from django.core.mail import send_mail
 from django.db import models
+from django.db.models import Sum
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+
+from budget.models import Income
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
@@ -33,6 +36,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         help_text=_("Designates whether the user can log into this admin site."),
     )
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
+    total_income = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+    total_gross_paycheck = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+    total_net_paycheck = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+    total_expenses = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+    total_savings = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
 
     objects = UserManager()
 
@@ -62,3 +70,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
+
+    def update_net_paycheck(self):
+        self.total_net_paycheck = self.income.aggregate(Sum("net_paycheck"))["net_paycheck__sum"] or 0
+        self.save()
