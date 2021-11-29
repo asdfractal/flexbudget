@@ -36,11 +36,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         help_text=_("Designates whether the user can log into this admin site."),
     )
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
-    total_income = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+    total_gross_salary = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
     total_gross_paycheck = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
     total_net_paycheck = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
-    total_expenses = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
-    total_savings = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+    total_paycheck_expenses = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+    total_annual_expenses = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+    total_paycheck_savings = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+    total_annual_savings = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
 
     objects = UserManager()
 
@@ -71,6 +73,32 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+    def update_gross_salary(self):
+        self.total_income = self.income.aggregate(Sum("gross_salary"))["gross_salary__sum"] or 0
+        self.save()
+
+    def update_gross_paycheck(self):
+        self.total_gross_paycheck = self.income.aggregate(Sum("gross_paycheck"))["gross_paycheck__sum"] or 0
+        self.save()
+
     def update_net_paycheck(self):
         self.total_net_paycheck = self.income.aggregate(Sum("net_paycheck"))["net_paycheck__sum"] or 0
+        self.save()
+
+    def update_paycheck_expenses(self):
+        self.total_paycheck_expenses = self.expenses.aggregate(Sum("per_paycheck_cost"))["per_paycheck_cost__sum"] or 0
+        self.save()
+
+    def update_annual_expenses(self):
+        self.total_annual_expenses = self.expenses.aggregate(Sum("per_paycheck_cost"))["per_paycheck_cost__sum"] or 0
+        self.save()
+
+    def update_paycheck_savings(self):
+        self.total_paycheck_savings = (
+            self.savings.aggregate(Sum("per_paycheck_saving"))["per_paycheck_saving__sum"] or 0
+        )
+        self.save()
+
+    def update_annual_savings(self):
+        self.total_annual_savings = self.savings.aggregate(Sum("annual_saving"))["annual_saving__sum"] or 0
         self.save()
