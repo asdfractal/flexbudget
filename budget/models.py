@@ -20,9 +20,9 @@ class Frequency(models.IntegerChoices):
 class Income(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="income")
     name = models.CharField(max_length=100)
-    gross_salary = models.DecimalField(max_digits=10, decimal_places=2)
-    gross_paycheck = models.DecimalField(max_digits=10, decimal_places=2)
-    net_paycheck = models.DecimalField(max_digits=10, decimal_places=2)
+    gross_salary = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    gross_paycheck = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    net_paycheck = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     frequency = models.IntegerField(choices=Frequency.choices, default=Frequency.WEEKLY)
 
     def __str__(self):
@@ -34,10 +34,10 @@ class Expenses(models.Model):
     name = models.CharField(max_length=100)
     category = models.ForeignKey("Category", on_delete=models.CASCADE, blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
+    monthly_frequency = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    per_paycheck_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    annual_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     frequency = models.IntegerField(choices=Frequency.choices, default=Frequency.WEEKLY)
-    monthly_frequency = models.IntegerField(default=0)
-    per_paycheck_cost = models.IntegerField(default=0)
-    annual_cost = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
@@ -58,8 +58,8 @@ class Savings(models.Model):
     name = models.CharField(max_length=100)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     is_percent = models.BooleanField(default=True)
-    per_paycheck_saving = models.IntegerField(default=0)
-    annual_saving = models.IntegerField(default=0)
+    per_paycheck_saving = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    annual_saving = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
         return self.name
