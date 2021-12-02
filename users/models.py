@@ -74,7 +74,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
     def update_gross_salary(self):
-        self.total_income = self.income.aggregate(Sum("gross_salary"))["gross_salary__sum"] or 0
+        self.total_gross_salary = self.income.aggregate(Sum("gross_salary"))["gross_salary__sum"] or 0
         self.save()
 
     def update_gross_paycheck(self):
@@ -86,11 +86,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         self.save()
 
     def update_paycheck_expenses(self):
+        print("update_paycheck_expenses")
         self.total_paycheck_expenses = self.expenses.aggregate(Sum("per_paycheck_cost"))["per_paycheck_cost__sum"] or 0
+        the_expense = self.expenses.aggregate(Sum("per_paycheck_cost"))["per_paycheck_cost__sum"]
+        print(the_expense)
         self.save()
 
     def update_annual_expenses(self):
-        self.total_annual_expenses = self.expenses.aggregate(Sum("per_paycheck_cost"))["per_paycheck_cost__sum"] or 0
+        self.total_annual_expenses = self.expenses.aggregate(Sum("annual_cost"))["annual_cost__sum"] or 0
         self.save()
 
     def update_paycheck_savings(self):
