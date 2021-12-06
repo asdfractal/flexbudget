@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.db.models import Sum
 from django.utils.translation import gettext_lazy as _
 
 
@@ -70,3 +71,53 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class UserBudgetInfo(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="budget")
+    primary_income_frequency = models.IntegerField(choices=Frequency.choices, default=Frequency.WEEKLY)
+    total_gross_salary = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+    total_gross_paycheck = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+    total_net_paycheck = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+    total_paycheck_expenses = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+    total_annual_expenses = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+    total_paycheck_savings = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+    total_annual_savings = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+
+    def __str__(self):
+        return f"{self.user}'s budget"
+
+    def update_gross_salary(self):
+        self.total_gross_salary = self.user.income.aggregate(Sum("gross_salary"))["gross_salary__sum"] or 0
+        self.save()
+
+    def update_gross_paycheck(self):
+        self.total_gross_paycheck = self.user.income.aggregate(Sum("gross_paycheck"))["gross_paycheck__sum"] or 0
+        self.save()
+
+    def update_net_paycheck(self):
+        self.total_net_paycheck = self.user.income.aggregate(Sum("net_paycheck"))["net_paycheck__sum"] or 0
+        self.save()
+
+    def update_paycheck_expenses(self):
+        print("update_paycheck_expenses")
+        self.total_paycheck_expenses = (
+            self.user.expenses.aggregate(Sum("per_paycheck_cost"))["per_paycheck_cost__sum"] or 0
+        )
+        the_expense = self.expenses.aggregate(Sum("per_paycheck_cost"))["per_paycheck_cost__sum"]
+        print(the_expense)
+        self.save()
+
+    def update_annual_expenses(self):
+        self.total_annual_expenses = self.user.expenses.aggregate(Sum("annual_cost"))["annual_cost__sum"] or 0
+        self.save()
+
+    def update_paycheck_savings(self):
+        self.total_paycheck_savings = (
+            self.user.savings.aggregate(Sum("per_paycheck_saving"))["per_paycheck_saving__sum"] or 0
+        )
+        self.save()
+
+    def update_annual_savings(self):
+        self.total_annual_savings = self.user.savings.aggregate(Sum("annual_saving"))["annual_saving__sum"] or 0
+        self.save()
