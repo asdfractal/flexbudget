@@ -102,6 +102,7 @@ class UserBudgetInfo(models.Model):
     total_annual_expenses = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
     total_paycheck_savings = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
     total_annual_savings = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
+    flex_amount = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
 
     def __str__(self):
         return f"{self.user}'s budget"
@@ -114,6 +115,7 @@ class UserBudgetInfo(models.Model):
         self._update_annual_expenses()
         self._update_paycheck_savings()
         self._update_annual_savings()
+        self._update_flex_amount()
         self.save()
 
     def _update_gross_salary(self):
@@ -140,6 +142,9 @@ class UserBudgetInfo(models.Model):
 
     def _update_annual_savings(self):
         self.total_annual_savings = self.user.savings.aggregate(Sum("annual_saving"))["annual_saving__sum"] or 0
+
+    def _update_flex_amount(self):
+        self.flex_amount = self.total_net_paycheck - self.total_paycheck_expenses - self.total_paycheck_savings or 0
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
