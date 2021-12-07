@@ -65,6 +65,17 @@ class Savings(models.Model):
     def __str__(self):
         return self.name
 
+    def _set_per_paycheck_saving(self):
+        self.per_paycheck_saving = self.amount
+
+    def _set_annual_saving(self):
+        self.annual_saving = self.user.budget.primary_income_frequency * self.amount
+
+    def save(self, *args, **kwargs):
+        self._set_per_paycheck_saving()
+        self._set_annual_saving()
+        super().save(*args, **kwargs)
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -100,12 +111,9 @@ class UserBudgetInfo(models.Model):
         self.save()
 
     def update_paycheck_expenses(self):
-        print("update_paycheck_expenses")
         self.total_paycheck_expenses = (
             self.user.expenses.aggregate(Sum("per_paycheck_cost"))["per_paycheck_cost__sum"] or 0
         )
-        the_expense = self.expenses.aggregate(Sum("per_paycheck_cost"))["per_paycheck_cost__sum"]
-        print(the_expense)
         self.save()
 
     def update_annual_expenses(self):
@@ -121,3 +129,6 @@ class UserBudgetInfo(models.Model):
     def update_annual_savings(self):
         self.total_annual_savings = self.user.savings.aggregate(Sum("annual_saving"))["annual_saving__sum"] or 0
         self.save()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
