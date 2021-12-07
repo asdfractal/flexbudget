@@ -4,9 +4,9 @@ from django.db.models import Sum
 from django.utils.translation import gettext_lazy as _
 
 
-class Frequency(models.IntegerChoices):
+class IncomeFrequency(models.IntegerChoices):
     """
-    Choices for frequency of a transaction.
+    Choices for frequency of income.
     """
 
     WEEKLY = 52, _("Weekly")
@@ -18,13 +18,26 @@ class Frequency(models.IntegerChoices):
     ANNUALLY = 1, _("Annually")
 
 
+class BillingFrequency(models.IntegerChoices):
+    """
+    Choices for frequency of an expense.
+    """
+
+    MONTHLY = 1, _("Monthly")
+    BI_MONTHLY = 2, _("Bi-monthly")
+    QUARTERLY = 3, _("Quarterly")
+    SEMIANNUALLY = 6, _("Semi-annually")
+    ANNUALLY = 12, _("Annually")
+    BI_ANNUALLY = 24, _("Bi-annually")
+
+
 class Income(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="income")
     name = models.CharField(max_length=100)
     gross_salary = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     gross_paycheck = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     net_paycheck = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    frequency = models.IntegerField(choices=Frequency.choices, default=Frequency.WEEKLY)
+    frequency = models.IntegerField(choices=IncomeFrequency.choices, default=IncomeFrequency.WEEKLY)
 
     def __str__(self):
         return self.name
@@ -33,24 +46,16 @@ class Income(models.Model):
 class Expenses(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="expenses")
     name = models.CharField(max_length=100)
-    category = models.ForeignKey("Category", on_delete=models.CASCADE, blank=True, null=True)
+    category = models.ForeignKey("Category", on_delete=models.SET_NULL, blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    monthly_frequency = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     per_paycheck_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     annual_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    frequency = models.IntegerField(choices=Frequency.choices, default=Frequency.WEEKLY)
+    frequency = models.IntegerField(choices=BillingFrequency.choices, default=BillingFrequency.MONTHLY)
 
     def __str__(self):
         return self.name
 
-    def _set_monthly_frequency(self):
-        if self.frequency >= 12:
-            self.monthly_frequency = self.frequency / 12
-        else:
-            self.monthly_frequency = 12 / self.frequency
-
     def save(self, *args, **kwargs):
-        self._set_monthly_frequency()
         super().save(*args, **kwargs)
 
 
@@ -86,7 +91,7 @@ class Category(models.Model):
 
 class UserBudgetInfo(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="budget")
-    primary_income_frequency = models.IntegerField(choices=Frequency.choices, default=Frequency.WEEKLY)
+    primary_income_frequency = models.IntegerField(choices=IncomeFrequency.choices, default=IncomeFrequency.WEEKLY)
     total_gross_salary = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
     total_gross_paycheck = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
     total_net_paycheck = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
