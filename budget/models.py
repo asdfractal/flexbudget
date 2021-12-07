@@ -55,7 +55,13 @@ class Expenses(models.Model):
     def __str__(self):
         return self.name
 
+    def _set_cost_totals(self):
+        annual_cost = (self.amount * 12) / self.frequency
+        self.annual_cost = annual_cost
+        self.per_paycheck_cost = annual_cost / self.user.budget.primary_income_frequency
+
     def save(self, *args, **kwargs):
+        self._set_cost_totals()
         super().save(*args, **kwargs)
 
 
@@ -70,15 +76,12 @@ class Savings(models.Model):
     def __str__(self):
         return self.name
 
-    def _set_per_paycheck_saving(self):
+    def _set_saving_totals(self):
+        self.annual_saving = self.user.budget.primary_income_frequency * self.amount
         self.per_paycheck_saving = self.amount
 
-    def _set_annual_saving(self):
-        self.annual_saving = self.user.budget.primary_income_frequency * self.amount
-
     def save(self, *args, **kwargs):
-        self._set_per_paycheck_saving()
-        self._set_annual_saving()
+        self._set_saving_totals()
         super().save(*args, **kwargs)
 
 
