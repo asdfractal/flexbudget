@@ -106,37 +106,40 @@ class UserBudgetInfo(models.Model):
     def __str__(self):
         return f"{self.user}'s budget"
 
-    def update_gross_salary(self):
+    def update_budget(self):
+        self._update_gross_salary()
+        self._update_gross_paycheck()
+        self._update_net_paycheck()
+        self._update_paycheck_expenses()
+        self._update_annual_expenses()
+        self._update_paycheck_savings()
+        self._update_annual_savings()
+        self.save()
+
+    def _update_gross_salary(self):
         self.total_gross_salary = self.user.income.aggregate(Sum("gross_salary"))["gross_salary__sum"] or 0
-        self.save()
 
-    def update_gross_paycheck(self):
+    def _update_gross_paycheck(self):
         self.total_gross_paycheck = self.user.income.aggregate(Sum("gross_paycheck"))["gross_paycheck__sum"] or 0
-        self.save()
 
-    def update_net_paycheck(self):
+    def _update_net_paycheck(self):
         self.total_net_paycheck = self.user.income.aggregate(Sum("net_paycheck"))["net_paycheck__sum"] or 0
-        self.save()
 
-    def update_paycheck_expenses(self):
+    def _update_paycheck_expenses(self):
         self.total_paycheck_expenses = (
             self.user.expenses.aggregate(Sum("per_paycheck_cost"))["per_paycheck_cost__sum"] or 0
         )
-        self.save()
 
-    def update_annual_expenses(self):
+    def _update_annual_expenses(self):
         self.total_annual_expenses = self.user.expenses.aggregate(Sum("annual_cost"))["annual_cost__sum"] or 0
-        self.save()
 
-    def update_paycheck_savings(self):
+    def _update_paycheck_savings(self):
         self.total_paycheck_savings = (
             self.user.savings.aggregate(Sum("per_paycheck_saving"))["per_paycheck_saving__sum"] or 0
         )
-        self.save()
 
-    def update_annual_savings(self):
+    def _update_annual_savings(self):
         self.total_annual_savings = self.user.savings.aggregate(Sum("annual_saving"))["annual_saving__sum"] or 0
-        self.save()
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
