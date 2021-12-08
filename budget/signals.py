@@ -22,6 +22,21 @@ def update_budget_on_save_savings(sender, instance, **kwargs):
     instance.user.budget.update_budget()
 
 
+@receiver(post_delete, sender=Income)
+def update_budget_on_delete_income(sender, instance, **kwargs):
+    instance.user.budget.update_budget()
+
+
+@receiver(post_delete, sender=Expenses)
+def update_budget_on_delete_expenses(sender, instance, **kwargs):
+    instance.user.budget.update_budget()
+
+
+@receiver(post_delete, sender=Savings)
+def update_budget_on_delete_savings(sender, instance, **kwargs):
+    instance.user.budget.update_budget()
+
+
 @receiver(post_save, sender=CURRENT_USER)
 def create_or_update_user_budget(sender, instance, created, **kwargs):
     """
