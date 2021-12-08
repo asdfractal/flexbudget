@@ -38,14 +38,28 @@ def update_budget(request, model_to_update):
         "expense": forms.ExpenseForm,
         "savings": forms.SavingsForm,
     }
+    table_collection = {
+        "income": "components/income_table.html",
+    }
     form = form_collection[model_to_update]
+    component = table_collection[model_to_update]
     populated_form = form(request.POST)
     if populated_form.is_valid():
         updated_data = populated_form.save(commit=False)
         updated_data.user = request.user
         updated_data.save()
-        print(updated_data)
-        return redirect(reverse("home"))
+        updated_budget = UserBudgetInfo.objects.get(user=request.user)
+        context = {
+            "updated_data": updated_data,
+            "updated_budget": updated_budget,
+        }
+        print(updated_data.gross_salary)
+        return render(
+            request,
+            component,
+            context,
+        )
+        # return redirect(reverse("home"))
     print(form.errors)
     return redirect(reverse("home"))
 

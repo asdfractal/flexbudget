@@ -1,0 +1,17 @@
+<tr>
+  <th>{{ updated_data.name|truncatechars:10 }}</th>
+  <td>{{ updated_data.gross_salary|floatformat:0 }}</td>
+  <td>{{ updated_data.gross_paycheck|floatformat:0 }}</td>
+  <td>{{ updated_data.net_paycheck|floatformat:0 }}</td>
+  <td class="text-right">{{ updated_data.frequency }}</td>
+  <td class="text-right"><a href="{% url 'delete_income' updated_data.id %}"><i class="far fa-times-circle"></i></a>
+  </td>
+</tr>
+<tr id="income_total">
+  <th>Total:</th>
+  <td>{{ updated_budget.total_gross_salary|floatformat:0 }}</td>
+  <td>{{ updated_budget.total_gross_paycheck|floatformat:0 }}</td>
+  <td>{{ updated_budget.total_net_paycheck|floatformat:0 }}</td>
+  <td></td>
+  <td></td>
+</tr>

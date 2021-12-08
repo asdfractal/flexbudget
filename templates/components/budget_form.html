@@ -2,12 +2,10 @@
 
 <div class="row row-eq-spacing">
   <div class="col-12">
-    <div class="content">
-      <form action="{{ post_url }}" method="post">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <input type="submit" value="Submit">
-      </form>
-    </div>
+    <form hx-post="{{ post_url }}" hx-target="#{{ target }}" hx-swap="outerHTML">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <input type="submit" value="Submit">
+    </form>
   </div>
 </div>
