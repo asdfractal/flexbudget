@@ -11,21 +11,25 @@ def home(request):
     expense_form = forms.ExpenseForm()
     savings_form = forms.SavingsForm()
 
-    user_income = models.Income.objects.filter(user=request.user)
-    user_expenses = models.Expenses.objects.filter(user=request.user)
-    user_savings = models.Savings.objects.filter(user=request.user)
+    if request.user.is_authenticated:
+        user_income = models.Income.objects.filter(user=request.user)
+        user_expenses = models.Expenses.objects.filter(user=request.user)
+        user_savings = models.Savings.objects.filter(user=request.user)
+        user_budget = models.UserBudgetInfo.objects.get(user=request.user)
 
-    context = {
-        "page_title": page_title,
-        "income_form": income_form,
-        "expense_form": expense_form,
-        "savings_form": savings_form,
-        "user_income": user_income,
-        "user_expenses": user_expenses,
-        "user_savings": user_savings,
-    }
+        context = {
+            "page_title": page_title,
+            "income_form": income_form,
+            "expense_form": expense_form,
+            "savings_form": savings_form,
+            "user_income": user_income,
+            "user_expenses": user_expenses,
+            "user_savings": user_savings,
+            "user_budget": user_budget,
+        }
 
-    return render(request, "home.html", context)
+        return render(request, "home.html", context)
+    return render(request, "home.html")
 
 
 @require_POST
