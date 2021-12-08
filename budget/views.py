@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.views.decorators.http import require_POST
 
-from . import models
+from .models import Income, Expenses, Savings, UserBudgetInfo
 from . import forms
 
 
@@ -12,10 +12,10 @@ def home(request):
     savings_form = forms.SavingsForm()
 
     if request.user.is_authenticated:
-        user_income = models.Income.objects.filter(user=request.user)
-        user_expenses = models.Expenses.objects.filter(user=request.user)
-        user_savings = models.Savings.objects.filter(user=request.user)
-        user_budget = models.UserBudgetInfo.objects.get(user=request.user)
+        user_income = Income.objects.filter(user=request.user)
+        user_expenses = Expenses.objects.filter(user=request.user)
+        user_savings = Savings.objects.filter(user=request.user)
+        user_budget = UserBudgetInfo.objects.get(user=request.user)
 
         context = {
             "page_title": page_title,
@@ -27,7 +27,6 @@ def home(request):
             "user_savings": user_savings,
             "user_budget": user_budget,
         }
-
         return render(request, "home.html", context)
     return render(request, "home.html")
 
@@ -48,4 +47,13 @@ def update_budget(request, model_to_update):
         print(updated_data)
         return redirect(reverse("home"))
     print(form.errors)
+    return redirect(reverse("home"))
+
+
+def delete_income(request, pk):
+    url = request.get_full_path()
+    income = get_object_or_404(Income, pk=pk)
+    print(url)
+    income.delete()
+    print("deleted")
     return redirect(reverse("home"))
