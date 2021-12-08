@@ -6,8 +6,8 @@
           <tr>
             <th></th>
             <th><i class="fas fa-file-invoice-dollar"></i></th>
-            <th><i class="fas fa-receipt"></i></th>
-            <th><i class="fas fa-wallet"></i></th>
+            <th class="text-right"><i class="fas fa-receipt"></i></th>
+            <th class="text-right"><i class="fas fa-wallet"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -15,10 +15,16 @@
           <tr>
             <th>{{ savings.name|truncatechars:10 }}</th>
             <td>{{ savings.amount|floatformat:0 }}</td>
-            <td>{{ savings.per_paycheck_saving|floatformat:0 }}</td>
-            <td>{{ savings.annual_saving|floatformat:0 }}</td>
+            <td class="text-right">{{ savings.per_paycheck_saving|floatformat:0 }}</td>
+            <td class="text-right">{{ savings.annual_saving|floatformat:0 }}</td>
           </tr>
           {% endfor %}
+          <tr>
+            <th>Total:</th>
+            <td></td>
+            <td class="text-right">{{ user_budget.total_paycheck_savings|floatformat:0 }}</td>
+            <td class="text-right">{{ user_budget.total_annual_savings|floatformat:0 }}</td>
+          </tr>
         </tbody>
       </table>
     </div>

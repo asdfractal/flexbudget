@@ -11,7 +11,7 @@
             <th class="text-right"><i class="fas fa-recycle"></i></th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="income_table">
           {% for income in user_income %}
           <tr>
             <th>{{ income.name|truncatechars:10 }}</th>
@@ -19,8 +19,18 @@
             <td>{{ income.gross_paycheck|floatformat:0 }}</td>
             <td>{{ income.net_paycheck|floatformat:0 }}</td>
             <td class="text-right">{{ income.frequency }}</td>
+            <td class="text-right"><a href="{% url 'delete_income' income.id %}"><i class="far fa-times-circle"></i></a>
+            </td>
           </tr>
           {% endfor %}
+          <tr id="income_total">
+            <th>Total:</th>
+            <td>{{ user_budget.total_gross_salary|floatformat:0 }}</td>
+            <td>{{ user_budget.total_gross_paycheck|floatformat:0 }}</td>
+            <td>{{ user_budget.total_net_paycheck|floatformat:0 }}</td>
+            <td></td>
+            <td></td>
+          </tr>
         </tbody>
       </table>
     </div>
