@@ -1,3 +1,8 @@
+<div class="row">
+  <div class="col-12">
+    <h5 class="text-center">Income</h5>
+  </div>
+</div>
 <div class="row .row-eq-spacing">
   <div class="col-12">
     <div class="content m-10 m-md-10">
@@ -33,6 +38,20 @@
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <div class="content m-10 m-md-10">
+      <details class="collapse-panel mw-full">
+        <summary class="collapse-header">
+          Add Income Field
+        </summary>
+        <div class="collapse-content">
+          {% include 'components/initial/budget_form.html' with form=income_form post_url="/create/income/" target="income_total" %}
+        </div>
+      </details>
     </div>
   </div>
 </div>

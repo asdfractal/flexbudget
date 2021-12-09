@@ -1,3 +1,8 @@
+<div class="row">
+  <div class="col-12">
+    <h5 class="text-center">Expenses</h5>
+  </div>
+</div>
 <div class="row .row-eq-spacing">
   <div class="col-12">
     <div class="content m-10 m-md-10">
@@ -25,7 +30,7 @@
             </td>
           </tr>
           {% endfor %}
-          <tr>
+          <tr id="expenses_total">
             <th>Total:</th>
             <td></td>
             <td></td>
@@ -39,3 +44,5 @@
     </div>
   </div>
 </div>
+
+{% include 'components/initial/budget_form.html' with form=expense_form post_url="/create/expenses/" target="expenses_total" %}

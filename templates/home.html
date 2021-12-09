@@ -4,54 +4,12 @@
 {% block content %}
 <div class="page-wrapper with-navbar with-navbar-fixed-bottom" id="page-wrapper">
   <div class="sticky-alerts"></div>
-  <nav class="navbar">
-    <div class="navbar-content">
-      <p>Flexbudget</p>
-    </div>
-    <div class="navbar-content ml-auto">
-      <button class="btn btn-action mr-5" type="button" onclick="halfmoon.toggleDarkMode()">
-        <i class="fa fa-moon-o" aria-hidden="true"></i>
-        <span class="sr-only">Toggle dark mode</span>
-      </button>
-      <a href="#" class="btn btn-primary" role="button">Get started</a>
-    </div>
-  </nav>
+  {% include 'components/initial/navbar.html' %}
   <div class="content-wrapper">
     <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <h5 class="text-center">Income</h5>
-        </div>
-      </div>
-      {% include 'components/income_display.html' %}
-      <div class="row">
-        <div class="col-12">
-          <div class="content m-10 m-md-10">
-            <details class="collapse-panel mw-full">
-              <summary class="collapse-header">
-                Add Income Field
-              </summary>
-              <div class="collapse-content">
-                {% include 'components/budget_form.html' with form=income_form post_url="/update/income/" target="income_total" %}
-              </div>
-            </details>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12">
-          <h5 class="text-center">Expenses</h5>
-        </div>
-      </div>
-      {% include 'components/expense_display.html' %}
-      {% include 'components/budget_form.html' with form=expense_form post_url="/update/expense/" %}
-      <div class="row">
-        <div class="col-12">
-          <h5 class="text-center">Savings</h5>
-        </div>
-      </div>
-      {% include 'components/savings_display.html' %}
-      {% include 'components/budget_form.html' with form=savings_form post_url="/update/savings/" %}
+      {% include 'components/initial/income_display.html' %}
+      {% include 'components/initial/expense_display.html' %}
+      {% include 'components/initial/savings_display.html' %}
     </div>
   </div>
   <nav class="navbar navbar-fixed-bottom">

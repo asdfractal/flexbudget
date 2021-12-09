@@ -1,0 +1,19 @@
+<tr>
+  <th>{{ updated_data.name|truncatechars:10 }}</th>
+  <td>{{ updated_data.category|floatformat:0 }}</td>
+  <td>{{ updated_data.amount }}</td>
+  <td>{{ updated_data.frequency }}</td>
+  <td class="text-right">{{ updated_data.per_paycheck_cost }}</td>
+  <td class="text-right">{{ updated_data.annual_cost }}</td>
+  <td class="text-right"><a href="{% url 'delete_expenses' updated_data.id %}"><i class="far fa-times-circle"></i></a>
+  </td>
+</tr>
+<tr id="expenses_total">
+  <th>Total:</th>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td class="text-right">{{ updated_budget.total_paycheck_expenses|floatformat:0 }}</td>
+  <td class="text-right">{{ updated_budget.total_annual_expenses|floatformat:0 }}</td>
+  <td></td>
+</tr>

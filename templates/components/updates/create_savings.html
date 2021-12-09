@@ -1,0 +1,15 @@
+<tr>
+  <th>{{ updated_data.name|truncatechars:10 }}</th>
+  <td>{{ updated_data.amount|floatformat:0 }}</td>
+  <td class="text-right">{{ updated_data.per_paycheck_saving }}</td>
+  <td class="text-right">{{ updated_data.annual_saving|floatformat:0 }}</td>
+  <td class="text-right"><a href="{% url 'delete_savings' updated_data.id %}"><i class="far fa-times-circle"></i></a>
+  </td>
+</tr>
+<tr id="savings_total">
+  <th>Total:</th>
+  <td></td>
+  <td class="text-right">{{ updated_budget.total_paycheck_savings|floatformat:0 }}</td>
+  <td class="text-right">{{ updated_budget.total_annual_savings|floatformat:0 }}</td>
+  <td></td>
+</tr>

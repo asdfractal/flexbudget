@@ -34,14 +34,16 @@ def home(request):
 
 
 @require_POST
-def update_budget(request, model_to_update):
+def create_budget_record(request, model_to_update):
     form_collection = {
         "income": forms.IncomeForm,
-        "expense": forms.ExpenseForm,
+        "expenses": forms.ExpenseForm,
         "savings": forms.SavingsForm,
     }
     table_collection = {
-        "income": "components/income_table.html",
+        "income": "components/updates/create_income.html",
+        "expenses": "components/updates/create_expenses.html",
+        "savings": "components/updates/create_savings.html",
     }
     form = form_collection[model_to_update]
     component = table_collection[model_to_update]
@@ -55,7 +57,6 @@ def update_budget(request, model_to_update):
             "updated_data": updated_data,
             "updated_budget": updated_budget,
         }
-        print(updated_data.gross_salary)
         return render(
             request,
             component,

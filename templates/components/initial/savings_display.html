@@ -1,3 +1,8 @@
+<div class="row">
+  <div class="col-12">
+    <h5 class="text-center">Savings</h5>
+  </div>
+</div>
 <div class="row .row-eq-spacing">
   <div class="col-12">
     <div class="content m-10 m-md-10">
@@ -21,14 +26,17 @@
             </td>
           </tr>
           {% endfor %}
-          <tr>
+          <tr id="savings_total">
             <th>Total:</th>
             <td></td>
             <td class="text-right">{{ user_budget.total_paycheck_savings|floatformat:0 }}</td>
             <td class="text-right">{{ user_budget.total_annual_savings|floatformat:0 }}</td>
+            <td></td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
 </div>
+
+{% include 'components/initial/budget_form.html' with form=savings_form post_url="/create/savings/" target="savings_total" %}
