@@ -21,6 +21,8 @@
             <td>{{ expense.frequency }}</td>
             <td class="text-right">{{ expense.per_paycheck_cost }}</td>
             <td class="text-right">{{ expense.annual_cost }}</td>
+            <td class="text-right"><a href="{% url 'delete_expenses' expense.id %}"><i class="far fa-times-circle"></i></a>
+            </td>
           </tr>
           {% endfor %}
           <tr>
@@ -30,6 +32,7 @@
             <td></td>
             <td class="text-right">{{ user_budget.total_paycheck_expenses|floatformat:0 }}</td>
             <td class="text-right">{{ user_budget.total_annual_expenses|floatformat:0 }}</td>
+            <td></td>
           </tr>
         </tbody>
       </table>

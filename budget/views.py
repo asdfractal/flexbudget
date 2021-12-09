@@ -1,3 +1,5 @@
+from django.apps import apps
+from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.views.decorators.http import require_POST
 
@@ -64,10 +66,12 @@ def update_budget(request, model_to_update):
     return redirect(reverse("home"))
 
 
-def delete_income(request, pk):
+def delete_budget_record(request, pk):
     url = request.get_full_path()
-    income = get_object_or_404(Income, pk=pk)
-    print(url)
-    income.delete()
+    url_parts = url.split("/")
+    model_type = ContentType.objects.get(model=url_parts[2])
+    model_class = apps.get_model(model_type.app_label, model_type.model)
+    model_instance = get_object_or_404(model_class, pk=pk)
+    model_instance.delete()
     print("deleted")
     return redirect(reverse("home"))

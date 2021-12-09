@@ -17,6 +17,8 @@
             <td>{{ savings.amount|floatformat:0 }}</td>
             <td class="text-right">{{ savings.per_paycheck_saving|floatformat:0 }}</td>
             <td class="text-right">{{ savings.annual_saving|floatformat:0 }}</td>
+            <td class="text-right"><a href="{% url 'delete_savings' savings.id %}"><i class="far fa-times-circle"></i></a>
+            </td>
           </tr>
           {% endfor %}
           <tr>
